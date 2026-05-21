@@ -4,7 +4,7 @@
 
 Browser extension for real-time page translation. Supports Firefox (MV2) and Chromium (MV3) from a single `src/` tree. Fork of [TWP by FilipePS](https://github.com/FilipePS/Traduzir-paginas-web).
 
-Translation engines: Google, Bing, Yandex, DeepL, LLM (any OpenAI-compatible API).
+Translation engines: Google, Bing, Yandex, DeepL.
 
 ## Build & Run
 
@@ -38,23 +38,24 @@ No tests, no linter, no typecheck commands configured.
 src/
 ├── background/          # Extension background/service worker
 │   ├── background.js    # Main background logic
-│   ├── translationService.js  # Translation API clients
+│   ├── translationService.js  # Translation API clients (Google, Bing, Yandex, DeepL)
 │   ├── translationCache.js    # IndexedDB cache (TTL + LRU)
 │   └── textToSpeech.js        # TTS via Google/Bing
 ├── contentScript/       # Injected into web pages
 │   ├── pageTranslator.js      # DOM translation engine
-│   ├── translateSelected.js   # Text selection popup
+│   ├── translateSelected.js   # Text selection popup (Shadow DOM)
 │   ├── showOriginal.js        # Show original text overlay
 │   ├── showTranslated.js      # Translated text display
 │   └── popupMobile.js         # Mobile floating popup
 ├── options/             # Options page (sidebar + cards layout)
-│   ├── options.html      # 7 sections: translation, llm-service, smart-mode, appearance, cache, hotkeys, advanced
-│   ├── options.css       # Self-contained CSS (no W3CSS dependency)
-│   ├── options.js        # ~1600 lines, dynamically generates list items, toggles, shortcuts
+│   ├── options.html      # Sections: translation, deepl, appearance, hotkeys, advanced
+│   ├── options.css       # Self-contained CSS (no external dependencies)
+│   ├── options.js        # Dynamically generates list items, toggles, shortcuts
 │   └── open-options.html # Lightweight opener (opens options.html in tab)
 ├── popup/               # Browser action popup
-│   ├── popup.html / popup.css / popup.js  # Modern popup (v0.2.0)
-│   └── old-popup.*      # Legacy popup (still in tree, not used by default)
+│   ├── popup.html / popup.css / popup.js  # Modern popup (280px compact)
+│   ├── improve-translation.html/js        # Translation feedback
+│   └── popup-translate-document.html/js   # Document translation
 ├── lib/                 # Shared modules (loaded as content scripts + background)
 │   ├── config.js        # twpConfig — all user settings with defaults, observers, persistence
 │   ├── i18n.js          # twpI18n — localization from _locales/
@@ -62,7 +63,6 @@ src/
 │   ├── platformInfo.js  # Detect mobile/firefox/chrome at runtime
 │   ├── darkmode.js      # Dark mode controller (system pref + localStorage)
 │   └── stuff.js         # Utility helpers ($ selector shorthand, etc.)
-├── w3css/               # W3.CSS library (still used by old popup only)
 ├── _locales/            # 43 languages — each has messages.json
 └── styles/
     └── design-system.css  # CSS variables + shared tokens (popup + content scripts)
@@ -84,19 +84,25 @@ Scripts must load in dependency order (enforced by manifest `content_scripts` an
 ### Options Page
 - Sidebar nav uses `<a href="#section-id">` with JS click handler
 - Old hashes (`#languages`, `#sites`, `#style`, etc.) are mapped via `sectionMap` in `options.js`
-- Dynamic list items use CSS classes `list-item` + `list-close` (NOT W3CSS)
+- Dynamic list items use CSS classes `list-item` + `list-close`
 - Dark mode: hidden `<select id="darkMode">` synced with sidebar toggle + appearance pills
 
 ### Config System
 All settings go through `twpConfig.get()` / `twpConfig.set()`. Defaults in `config.js:defaultConfig`. Observers via `twpConfig.onReady()` and `twpConfig.addObserver()`.
 
+### Translation Services
+- Google, Bing, Yandex are free (no API key needed)
+- DeepL requires API key (free tier: 500K chars/month)
+- Services selected via pills in popup and text selection popup
+- `getSafeServiceByName()` returns null if service not available — callers must handle null
+
 ## Things to Avoid
 
-- **Do not use W3CSS classes** in options or popup — modernized pages use custom CSS only
-- **Do not reference `old-popup.html`** from background.js — it's kept for fallback only, `config.useOldPopup` defaults to `"no"`
+- **Do not add W3CSS** — removed in v0.2.0, all UI uses custom CSS
 - **Do not add donation/Patreon UI** — removed in v0.2.0 modernization
 - **Do not modify `background-bundle.js`** — it's auto-generated during Chromium build
 - **Do not add npm dependencies** for UI — vanilla JS/CSS only
+- **Do not add LLM features** — removed in v0.2.0, not planned
 
 ## i18n
 
