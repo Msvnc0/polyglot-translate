@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/styles/design-system.css">
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="popup-wrapper" style="position: relative;">
+        <!-- ===== HEADER ===== -->
+        <div class="pl-header">
+            <div style="position: absolute; top: 8px; right: 10px; display: flex; gap: 6px;">
+                <button class="pl-icon-btn" id="btnMenuTrigger" title="Options">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <circle cx="12" cy="6" r="2"/>
+                        <circle cx="12" cy="12" r="2"/>
+                        <circle cx="12" cy="18" r="2"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="pl-header-title" data-i18n="extensionName">Polyglot</div>
+            <div class="pl-header-sub" data-i18n="lblTranslatePageToTargetLanguage">Translate the page to...</div>
+        </div>
+
+        <!-- ===== LANGUAGE GRID ===== -->
+        <div class="lang-grid" id="langGrid"></div>
+        <div class="translate-action">
+          <button class="translate-btn" id="btnTranslate">Translate</button>
+        </div>
+        <button class="restore-btn hidden" id="btnRestore">↩ Restore original</button>
+
+        <!-- ===== RECENTLY USED ===== -->
+        <div id="recentSection">
+          <div class="recent-label">Recently Used</div>
+          <div class="recent-pills" id="recentLangs"></div>
+        </div>
+
+        <!-- ===== MORE LANGUAGES DROPDOWN ===== -->
+        <div style="padding: 0 12px 4px;">
+            <select class="pl-dropdown" id="moreLangDropdown">
+                <option selected disabled>+ More languages...</option>
+            </select>
+        </div>
+
+        <!-- ===== SERVICE PILLS ===== -->
+        <div class="service-row">
+            <span data-i18n="lblTranslationService" style="font-size:0.72rem;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:0.05em;">Service</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 4px;">
+                <span class="pl-pill active" data-service="google">Google</span>
+                <span class="pl-pill" data-service="bing">Bing</span>
+                <span class="pl-pill" data-service="yandex">Yandex</span>
+                <span class="pl-pill" data-service="deepl">DeepL</span>
+            </div>
+        </div>
+
+        <!-- ===== QUICK ACTIONS ===== -->
+        <div class="quick-actions">
+            <div class="toggle-row" data-popupPanelSection="1">
+                <span data-i18n="btnAlwaysTranslate">Always translate this site</span>
+                <label class="pl-toggle">
+                    <input type="checkbox" id="cbAlwaysTranslateThisSite">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="toggle-row" data-popupPanelSection="1">
+                <span data-i18n="btnNeverTranslate">Never translate this site</span>
+                <label class="pl-toggle">
+                    <input type="checkbox" id="cbNeverTranslateThisSite">
+                    <span class="slider"></span>
+                </label>
+            </div>
+
+            <!-- ===== MORE TOGGLES (collapsible) ===== -->
+            <div class="toggle-more-btn" id="btnToggleMore">
+                <span>More options</span>
+                <span class="toggle-more-arrow">▾</span>
+            </div>
+            <div class="toggle-more-content hidden" id="toggleMoreContent">
+                <div class="toggle-row" data-popupPanelSection="1">
+                    <span id="lblAlwaysTranslateThisLang">Always translate this language</span>
+                    <label class="pl-toggle">
+                        <input type="checkbox" id="cbAlwaysTranslateThisLang" disabled>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-row" data-popupPanelSection="1">
+                    <span id="lblNeverTranslateThisLang">Never translate this language</span>
+                    <label class="pl-toggle">
+                        <input type="checkbox" id="cbNeverTranslateThisLang" disabled>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-row" data-popupPanelSection="3">
+                    <span data-i18n="lblShowTranslateSelectedButton">Show selected-text button</span>
+                    <label class="pl-toggle">
+                        <input type="checkbox" id="cbShowTranslateSelectedButton">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-row" data-popupPanelSection="4">
+                    <span data-i18n="lblShowOriginalTextWhenHovering">Show original when hovering</span>
+                    <label class="pl-toggle">
+                        <input type="checkbox" id="cbShowOriginalWhenHovering">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-row" data-popupPanelSection="5">
+                    <span data-i18n="lblShowTranslatedWhenHoveringThisSite">Show translation when hovering</span>
+                    <label class="pl-toggle">
+                        <input type="checkbox" id="cbShowTranslatedWhenHoveringThisSite">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== FOOTER ===== -->
+        <div class="pl-footer">
+            <div style="display: flex; align-items: center; gap: 6px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <path d="M3 9h18M9 21V9"/>
+                </svg>
+                <span id="cacheStats">-- MB · --% hit</span>
+            </div>
+            <span id="btnDarkModeToggle" title="Dark mode" style="cursor: pointer;">🌙</span>
+        </div>
+
+        <!-- ===== LEGACY HIDDEN ELEMENTS (JS compatibility) ===== -->
+        <div style="display: none;">
+            <!-- Always translate from (language-specific) -->
+            <div id="divAlwaysTranslateThisLang">
+                <input type="checkbox" id="cbAlwaysTranslateThisLang" disabled>
+                <label id="lblAlwaysTranslateThisLang" for="cbAlwaysTranslateThisLang" data-i18n="lblAlwaysTranslate"
+                    data-i18n-ph-value="">Always translate from</label>
+            </div>
+
+            <!-- Show translated when hovering this language -->
+            <div id="divShowTranslatedWhenHoveringThisLang">
+                <input type="checkbox" id="cbShowTranslatedWhenHoveringThisLang" disabled>
+                <label id="lblShowTranslatedWhenHoveringThisLang" for="cbShowTranslatedWhenHoveringThisLang"
+                    data-i18n="lblShowTranslatedWhenHoveringThisLang" data-i18n-ph-value="">Show translation when
+                    hovering over websites in</label>
+            </div>
+
+            <!-- Options select -->
+            <div id="divMenu">
+                <div id="btnMenu">
+                    <div class="menuDot"></div>
+                </div>
+                <select id="btnOptions">
+                    <option value="options" selected disabled hidden>Options</option>
+                    <option data-i18n="msgChooseAnotherLanguage" value="changeLanguage">Choose another language</option>
+                    <option data-i18n="btnNeverTranslateThisLanguage" value="neverTranslateThisLanguage"
+                        style="display: none;">Never translate this language</option>
+                    <option data-i18n="btnNeverTranslate" value="neverTranslateThisSite">Never translate this site</option>
+                    <option data-i18n="btnAlwaysTranslate" value="alwaysTranslateThisSite" data-popupPanelSection2="1">
+                        Always translate this site</option>
+                    <optgroup label="" data-popupPanelSection2="6"></optgroup>
+                    <option data-i18n="lblShowTranslateSelectedButton" value="showTranslateSelectedButton"
+                        data-popupPanelSection2="3">Show the button to translate the selected text</option>
+                    <option data-i18n="lblShowOriginalTextWhenHovering" value="showOriginalTextWhenHovering"
+                        data-popupPanelSection2="4">Show original text when hovering</option>
+                    <option data-i18n="lblShowTranslatedWhenHoveringThisSite" value="showTranslatedWhenHoveringThisSite"
+                        data-popupPanelSection2="5">Show translation when hovering over this site</option>
+                    <option data-i18n="lblShowTranslatedWhenHoveringThisLang" data-i18n-ph-value=""
+                        value="showTranslatedWhenHoveringThisLang" data-popupPanelSection2="6" hidden>Show translation when
+                        hovering over websites in</option>
+                    <optgroup label="" data-popupPanelSection2="6"></optgroup>
+                    <option data-i18n="btnOpenOnGoogleTranslate" value="translateInExternalSite">Open in Google Translate
+                    </option>
+                    <option data-i18n="btnMoreOptions" value="moreOptions">More options</option>
+                    <option data-i18n="msgTranslatePDF" value="translatePDF">Translate PDF</option>
+                </select>
+            </div>
+
+            <!-- Service switch icons -->
+            <div id="divIconTranslate" title="Switch between translation services"
+                data-i18n-title="swapTranslationService">
+                <img id='iconTranslate' src="/icons/google-translate-32.png">
+                <img id='iconSwap' src="/icons/swap-32.png">
+            </div>
+
+            <!-- More/Less -->
+            <div id="moreOrLess">
+                <div id="more">
+                    <span data-i18n="more">More</span> <i class="arrow down"></i>
+                </div>
+                <div id="less">
+                    <i class="arrow up"></i> <span data-i18n="less">Less</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/lib/polyfill.js"></script>
+    <script src="/lib/checkedLastError.js"></script>
+    <script src="/lib/stuff.js"></script>
+    <script src="/lib/darkmode.js"></script>
+    <script src="detect-pdf.js"></script>
+    <script src="/lib/languages.js"></script>
+    <script src="/lib/config.js"></script>
+    <script src="/lib/i18n.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

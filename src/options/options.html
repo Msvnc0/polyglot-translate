@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Polyglot Translate — Options</title>
+<link rel="stylesheet" href="options.css" />
+<script src="/lib/darkmode.js"></script>
+</head>
+<body>
+
+<!-- Mobile Header -->
+<header class="mobile-header">
+  <button id="btnOpenMenu" class="mobile-menu-btn" aria-label="Open menu">
+    <span class="hamburger"></span>
+  </button>
+  <span class="mobile-header-title">Polyglot Translate</span>
+</header>
+
+<!-- Mobile Menu Container -->
+<div id="menuContainer"></div>
+
+<!-- Sidebar Navigation -->
+<nav id="sideBar" class="sidebar">
+  <div class="sidebar-logo">
+    <div class="sidebar-logo-icon">PL</div>
+    <div>
+      <div class="sidebar-logo-text">Polyglot</div>
+      <div class="sidebar-logo-version">v0.2.0</div>
+    </div>
+  </div>
+
+  <a class="nav-item active" href="#translation"><span class="nav-icon">🌐</span> Translation</a>
+  <a class="nav-item" href="#deepl"><span class="nav-icon">🔵</span> DeepL</a>
+  <a class="nav-item" href="#appearance"><span class="nav-icon">🎨</span> Appearance</a>
+  <a class="nav-item" href="#hotkeys"><span class="nav-icon">⌨️</span> Hotkeys</a>
+  <a class="nav-item" href="#advanced"><span class="nav-icon">🔧</span> Advanced</a>
+
+  <div class="sidebar-footer">
+    <span class="sidebar-links">Dark Mode</span>
+    <label class="switch">
+      <input type="checkbox" id="darkModeToggle" />
+      <span class="slider"></span>
+    </label>
+  </div>
+</nav>
+
+<!-- Main Content Area -->
+<main class="main">
+
+<!-- SECTION: Translation -->
+<section id="translation" class="content-section">
+  <h2 class="section-title">🌐 Translation</h2>
+
+  <div class="card" id="targetLanguageCard">
+    <div class="card-header"><div class="card-title">Target Language</div><div class="card-badge badge-info">Required</div></div>
+    <div class="target-lang-row">
+      <div class="target-lang-field">
+        <label class="target-lang-label">Page Translation</label>
+        <select id="selectPageTargetLang" class="target-lang-select"></select>
+      </div>
+      <div class="target-lang-field">
+        <label class="target-lang-label">Text Translation</label>
+        <select id="selectTextTargetLang" class="target-lang-select"></select>
+      </div>
+    </div>
+    <div class="target-lang-hint">Pages will be automatically translated to this language when "Always translate" is active.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Quick Access Languages</div>
+      <div class="card-badge badge-smart">Up to 6</div>
+    </div>
+    <div class="service-options" id="targetLangPills">
+      <!-- Dynamically populated from config -->
+    </div>
+    <select id="addTargetLangSelect" class="hidden"></select>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">Page Translation</div></div>
+    <div class="modern-toggle">
+      <div><div class="modern-toggle-label">Translation Service</div></div>
+      <select id="selectPageTranslatorService" class="target-lang-select" style="width:auto;min-width:140px;"></select>
+    </div>
+    <div class="modern-toggle"><div><div class="modern-toggle-label">Show original when hovering</div></div><label class="switch"><input type="checkbox" id="toggleShowOriginalOnHover"><span class="slider"></span></label></div>
+    <div class="modern-toggle"><div><div class="modern-toggle-label">Show translation when hovering</div></div><label class="switch"><input type="checkbox" id="toggleShowTranslationOnHover"><span class="slider"></span></label></div>
+    <div class="modern-toggle"><div><div class="modern-toggle-label">Translate dynamically created content</div><div class="modern-toggle-desc">Content added by JavaScript after page load</div></div><label class="switch"><input type="checkbox" id="toggleDynamicContent"><span class="slider"></span></label></div>
+    <div class="modern-toggle"><div><div class="modern-toggle-label">Translate iframe content</div><div class="modern-toggle-desc">Embedded content like YouTube, Twitter, maps</div></div><label class="switch"><input type="checkbox" id="toggleIframeTranslation"><span class="slider"></span></label></div>
+    <div class="modern-toggle"><div><div class="modern-toggle-label">Translate &lt;pre&gt; blocks</div><div class="modern-toggle-desc">Code blocks and preformatted text</div></div><label class="switch"><input type="checkbox" id="togglePreTag"><span class="slider"></span></label></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">Text Translation</div></div>
+    <div class="modern-toggle">
+      <div><div class="modern-toggle-label">Translation Service</div></div>
+      <select id="selectTextTranslatorService" class="target-lang-select" style="width:auto;min-width:140px;"></select>
+    </div>
+    <div class="modern-toggle"><div><div class="modern-toggle-label">Show "translate selected text" button</div></div><label class="switch"><input type="checkbox" id="toggleShowSelectedButton"><span class="slider"></span></label></div>
+    <div class="modern-toggle"><div><div class="modern-toggle-label">Auto-translate selected text</div><div class="modern-toggle-desc">Instant translation on text selection</div></div><label class="switch"><input type="checkbox" id="toggleAutoTranslateSelected"><span class="slider"></span></label></div>
+    <div class="modern-toggle"><div><div class="modern-toggle-label">Don't show if text is not valid</div><div class="modern-toggle-desc">Hide popup for short or invalid selections</div></div><label class="switch"><input type="checkbox" id="toggleDontShowInvalid"><span class="slider"></span></label></div>
+    <div class="modern-toggle"><div><div class="modern-toggle-label">Don't show if text is already in target language</div></div><label class="switch"><input type="checkbox" id="toggleDontShowTargetLang"><span class="slider"></span></label></div>
+    <div class="modern-toggle"><div><div class="modern-toggle-label">Don't show if language is unknown</div></div><label class="switch"><input type="checkbox" id="toggleDontShowUnknown"><span class="slider"></span></label></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">Site Rules</div></div>
+    <div class="site-list-card">
+      <div class="site-list-header">
+        <span class="site-list-title">Always translate <span class="site-list-count">0</span></span>
+        <button class="site-list-add" id="btnAddAlwaysTranslateSite">+ Add site</button>
+      </div>
+      <ul class="site-list-items" id="alwaysTranslateSitesNew"></ul>
+    </div>
+    <div class="site-list-card">
+      <div class="site-list-header">
+        <span class="site-list-title">Never translate <span class="site-list-count">0</span></span>
+        <button class="site-list-add" id="btnAddNeverTranslateSite">+ Add site</button>
+      </div>
+      <ul class="site-list-items" id="neverTranslateSitesNew"></ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">Language Rules</div></div>
+    <div class="site-list-card">
+      <div class="site-list-header">
+        <span class="site-list-title">Always translate <span class="site-list-count">0</span></span>
+        <select id="addAlwaysTranslateLangSelect" class="target-lang-select" style="width:auto;min-width:120px;padding:2px 6px;font-size:0.75rem;"></select>
+      </div>
+      <ul class="site-list-items" id="alwaysTranslateLangsNew"></ul>
+    </div>
+    <div class="site-list-card">
+      <div class="site-list-header">
+        <span class="site-list-title">Never translate <span class="site-list-count">0</span></span>
+        <select id="addNeverTranslateLangSelect" class="target-lang-select" style="width:auto;min-width:120px;padding:2px 6px;font-size:0.75rem;"></select>
+      </div>
+      <ul class="site-list-items" id="neverTranslateLangsNew"></ul>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: DeepL -->
+<section id="deepl" class="content-section hidden">
+  <h2 class="section-title">🔵 DeepL</h2>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">API Key</div>
+      <span class="card-badge badge-info">Required</span>
+    </div>
+    <div class="modern-toggle">
+      <div><div class="modern-toggle-label">DeepL API Key</div><div class="modern-toggle-desc">Get your free API key at deepl.com/pro#developer</div></div>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <input type="password" id="deeplApiKeyInput" placeholder="your-api-key..." style="width:200px;padding:4px 8px;border:1px solid var(--color-border);border-radius:var(--radius-sm);font-size:0.8rem;background:var(--color-bg);color:var(--color-text);" />
+        <button id="btnSaveDeepLKey" class="btn btn-primary" style="padding:4px 12px;font-size:0.8rem;">Save</button>
+        <button id="btnRemoveDeepLKey" class="btn btn-ghost" style="padding:4px 12px;font-size:0.8rem;">Remove</button>
+      </div>
+    </div>
+    <p id="deeplStatus" style="font-size:0.8rem;color:var(--color-text-muted);margin:8px 0 0;"></p>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Configuration</div>
+    </div>
+    <div class="modern-toggle">
+      <div><div class="modern-toggle-label">Enable DeepL</div><div class="modern-toggle-desc">Show DeepL in service selection</div></div>
+      <label class="switch"><input type="checkbox" id="toggleDeepLEnabled"><span class="slider"></span></label>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: Appearance -->
+<section id="appearance" class="content-section hidden">
+  <h2 class="section-title">🎨 Appearance</h2>
+
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title">Theme</div>
+    </div>
+    <div class="service-options">
+      <button class="service-pill" data-theme-value="light">☀️ Light</button>
+      <button class="service-pill" data-theme-value="dark">🌙 Dark</button>
+      <button class="service-pill" data-theme-value="system">🖥️ System Default</button>
+    </div>
+    <select id="darkMode" class="hidden">
+      <option value="auto">Auto</option>
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+    </select>
+  </div>
+</section>
+
+<!-- SECTION: Hotkeys -->
+<section id="hotkeys" class="content-section hidden">
+  <h2 class="section-title">⌨️ Hotkeys</h2>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">Keyboard Shortcuts</div></div>
+    <div class="form-desc" style="margin-bottom: var(--space-md);">Enable shortcuts below. Customize keys at <a href="#" id="openChromeShortcuts">chrome://extensions/shortcuts</a></div>
+    <div style="display: flex; flex-direction: column; gap: var(--space-sm);">
+      <div class="modern-toggle"><div><div class="modern-toggle-label">Toggle Translation</div><div class="modern-toggle-desc">Ctrl+Alt+T</div></div><label class="switch"><input type="checkbox" id="hotkeyToggleTranslation"><span class="slider"></span></label></div>
+      <div class="modern-toggle"><div><div class="modern-toggle-label">Translate Selected Text</div><div class="modern-toggle-desc">Ctrl+Alt+S</div></div><label class="switch"><input type="checkbox" id="hotkeyTranslateSelectedText"><span class="slider"></span></label></div>
+      <div class="modern-toggle"><div><div class="modern-toggle-label">Swap Translation Service</div><div class="modern-toggle-desc">Ctrl+Alt+Q</div></div><label class="switch"><input type="checkbox" id="hotkeySwapService"><span class="slider"></span></label></div>
+      <div class="modern-toggle"><div><div class="modern-toggle-label">Show Original</div><div class="modern-toggle-desc">Shift+Alt+0</div></div><label class="switch"><input type="checkbox" id="hotkeyShowOriginal"><span class="slider"></span></label></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION: Advanced -->
+<section id="advanced" class="content-section hidden">
+  <h2 class="section-title">🔧 Advanced</h2>
+
+  <div class="card">
+    <div class="card-header"><div class="card-title">Developer</div></div>
+    <div class="form-row">
+      <label class="form-label">Debug Mode</label>
+      <label class="switch"><input type="checkbox" id="toggleDebugMode"><span class="slider"></span></label>
+    </div>
+    <div style="margin-top: var(--space-sm); display: flex; gap: var(--space-sm);">
+      <button id="btnResetAllSettings" class="btn btn-ghost">Reset All Settings</button>
+      <button id="btnExportConfig" class="btn btn-ghost">Export Config</button>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- Hidden elements for JS compatibility — JS writes to these but they are not displayed -->
+<div class="hidden">
+  <select id="selectUiLanguage"></select>
+  <button id="btnApplyUiLanguage"></button>
+  <select id="selectTargetLanguage"></select>
+  <select id="selectTargetLanguageForText"></select>
+  <select id="favoriteLanguage1"></select>
+  <select id="favoriteLanguage2"></select>
+  <select id="favoriteLanguage3"></select>
+  <select id="addToNeverTranslateLangs"></select>
+  <ul id="neverTranslateLangs"></ul>
+  <select id="addToAlwaysTranslateLangs"></select>
+  <ul id="alwaysTranslateLangs"></ul>
+  <select id="addLangToTranslateWhenHovering"></select>
+  <ul id="langsToTranslateWhenHovering"></ul>
+  <button id="addToAlwaysTranslateSites"></button>
+  <ul id="alwaysTranslateSites"></ul>
+  <button id="addToNeverTranslateSites"></button>
+  <ul id="neverTranslateSites"></ul>
+  <button id="addSiteToTranslateWhenHovering"></button>
+  <ul id="sitesToTranslateWhenHovering"></ul>
+  <button id="addToCustomDictionary"></button>
+  <ul id="customDictionary"></ul>
+  <button id="openNativeShortcutManager"></button>
+  <input type="checkbox" id="translateSelectedWhenPressTwice" />
+  <input type="checkbox" id="translateTextOverMouseWhenPressTwice" />
+  <ul id="KeyboardShortcuts"></ul>
+  <select id="pageTranslatorService"></select>
+  <select id="textTranslatorService"></select>
+  <select id="textToSpeechService"></select>
+  <input type="range" id="ttsSpeed" />
+  <span id="displayTtsSpeed"></span>
+  <input type="range" id="ttsVolume" />
+  <span id="displayTtsVolume"></span>
+  <select id="showTranslateSelectedButton"></select>
+  <div id="translateSelectedAdvancedOptions"></div>
+  <input type="checkbox" id="dontShowIfIsNotValidText" />
+  <input type="checkbox" id="dontShowIfPageLangIsTargetLang" />
+  <input type="checkbox" id="dontShowIfPageLangIsUnknown" />
+  <input type="checkbox" id="dontShowIfSelectedTextIsTargetLang" />
+  <input type="checkbox" id="dontShowIfSelectedTextIsUnknown" />
+  <select id="showOriginalTextWhenHovering"></select>
+  <select id="autoTranslateWhenClickingALink"></select>
+  <select id="translateDynamicallyCreatedContent"></select>
+  <select id="dontSortResults"></select>
+  <select id="translateTag_pre"></select>
+  <select id="enableIframePageTranslation"></select>
+  <select id="showTranslatePageContextMenu"></select>
+  <select id="showTranslateSelectedContextMenu"></select>
+  <select id="whenShowMobilePopup"></select>
+  <select id="showButtonInTheAddressBar"></select>
+  <select id="translateClickingOnce"></select>
+  <input type="text" id="libreURL" />
+  <input type="password" id="libreKEY" />
+  <button id="addLibre"></button>
+  <button id="removeLibre"></button>
+  <input type="password" id="deeplKEY" />
+  <button id="addDeepL"></button>
+  <button id="removeDeepL"></button>
+  <p id="deeplApiResponse"></p>
+  <select id="showMobilePopupOnDesktop"></select>
+  <select id="addPaddingToPage"></select>
+  <button id="btnShowProxyConfiguration"></button>
+  <div id="googleProxyContainer"></div>
+  <input type="text" id="googleTranslateProxyServer" />
+  <input type="text" id="googleTtsProxyServer" />
+  <button id="addGoogleProxy"></button>
+  <button id="removeGoogleProxy"></button>
+  <button id="backupToFile"></button>
+  <button id="restoreFromFile"></button>
+  <button id="resetToDefault"></button>
+  <input type="checkbox" id="btnEnableGoogle" />
+  <input type="checkbox" id="btnEnableBing" />
+  <input type="checkbox" id="btnEnableYandex" />
+  <input type="checkbox" id="btnEnableDeepL" />
+  <select id="useAlternativeService"></select>
+</div>
+
+<script src="/lib/polyfill.js"></script>
+<script src="/lib/checkedLastError.js"></script>
+<script src="/lib/stuff.js"></script>
+<script src="/lib/languages.js"></script>
+<script src="/lib/config.js"></script>
+<script src="/lib/platformInfo.js"></script>
+<script src="/lib/i18n.js"></script>
+<script src="options.js"></script>
+
+</body>
+</html>

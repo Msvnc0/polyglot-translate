@@ -1,0 +1,249 @@
+/* design-system.css — Polyglot Translate v0.2.0 */
+
+/* ===== CSS VARIABLES ===== */
+:root {
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Colors — Light */
+  --color-primary: #4F46E5;
+  --color-primary-hover: #4338CA;
+  --color-bg: #FFFFFF;
+  --color-surface: #F9FAFB;
+  --color-surface-elevated: #FFFFFF;
+  --color-text: #111827;
+  --color-text-secondary: #6B7280;
+  --color-text-muted: #9CA3AF;
+  --color-border: #E5E7EB;
+  --color-border-subtle: #F3F4F6;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+}
+
+/* Dark Mode */
+[data-theme="dark"] {
+  --color-primary: #6366F1;
+  --color-primary-hover: #818CF8;
+  --color-bg: #0F172A;
+  --color-surface: #1E293B;
+  --color-surface-elevated: #334155;
+  --color-text: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: #64748B;
+  --color-border: #334155;
+  --color-border-subtle: #1E293B;
+}
+
+/* Auto-detect system preference */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --color-primary: #6366F1;
+    --color-primary-hover: #818CF8;
+    --color-bg: #0F172A;
+    --color-surface: #1E293B;
+    --color-surface-elevated: #334155;
+    --color-text: #F8FAFC;
+    --color-text-secondary: #94A3B8;
+    --color-text-muted: #64748B;
+    --color-border: #334155;
+    --color-border-subtle: #1E293B;
+  }
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(-10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ===== UTILITY CLASSES ===== */
+body {
+  font-family: var(--font-sans);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+/* ===== TOGGLE SWITCH ===== */
+.pl-toggle {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+}
+.pl-toggle input { opacity: 0; width: 0; height: 0; }
+.pl-toggle .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: var(--color-border);
+  transition: .3s;
+  border-radius: var(--radius-full);
+}
+.pl-toggle .slider::before {
+  position: absolute;
+  content: "";
+  height: 18px; width: 18px;
+  left: 3px; bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+.pl-toggle input:checked + .slider { background-color: var(--color-primary); }
+.pl-toggle input:checked + .slider::before { transform: translateX(20px); }
+
+/* ===== CARD ===== */
+.pl-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-md);
+  transition: all var(--transition-fast);
+}
+.pl-card:hover {
+  box-shadow: 0 8px 12px -2px rgba(0,0,0,0.1);
+  transform: translateY(-1px);
+}
+
+/* ===== SERVICE PILL ===== */
+.pl-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 8px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: 0.7rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.pl-pill:hover { border-color: var(--color-primary); transform: translateY(-1px); }
+.pl-pill.active {
+  border-color: var(--color-primary);
+  background: rgba(79,70,229,0.08);
+  color: var(--color-primary);
+}
+
+/* ===== LANGUAGE BUTTON ===== */
+.pl-lang-btn {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 5px 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-align: center;
+  transition: all var(--transition-fast);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+}
+.pl-lang-btn:hover { border-color: var(--color-primary); transform: translateY(-1px); }
+.pl-lang-btn.active { background: var(--color-primary); color: white; border-color: var(--color-primary); }
+
+/* ===== ICON BUTTON ===== */
+.pl-icon-btn {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  backdrop-filter: blur(4px);
+  transition: all var(--transition-fast);
+}
+.pl-icon-btn:hover { background: rgba(255,255,255,0.25); transform: scale(1.1); }
+
+/* ===== DROPDOWN ===== */
+.pl-dropdown {
+  padding: 5px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--color-text);
+  cursor: pointer;
+  width: 100%;
+}
+.pl-dropdown:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.1);
+}
+
+/* ===== HEADER ===== */
+.pl-header {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+  color: white;
+  padding: 10px 12px;
+  position: relative;
+}
+.pl-header-title { font-weight: 700; font-size: 0.95rem; }
+.pl-header-sub { font-size: 0.72rem; opacity: 0.85; margin-top: 1px; }
+
+/* ===== FOOTER ===== */
+.pl-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 12px;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border-subtle);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+/* ===== FOCUS STATES (a11y) ===== */
+button:focus-visible, select:focus-visible, input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.2);
+}
+
+/* ===== SCROLLBAR ===== */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,0,0,0.2) transparent;
+}
+[data-theme="dark"] * {
+  scrollbar-color: rgba(255,255,255,0.2) transparent;
+}

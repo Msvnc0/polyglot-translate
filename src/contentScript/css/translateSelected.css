@@ -1,0 +1,325 @@
+* {
+    scrollbar-color: rgba(0, 0, 0, 0.4) rgba(0, 0, 0, 0.2);
+    box-sizing: border-box;
+}
+
+#eDivResult {
+    --bg: #1E293B;
+    --surface: #334155;
+    --text: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --border: #334155;
+    --primary: #6366F1;
+    --primary-hover: #818CF8;
+    --action-bg: rgba(255,255,255,0.1);
+    --action-bg-hover: rgba(255,255,255,0.2);
+
+    all: initial;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-style: normal;
+    font-variant: normal;
+    line-height: 1.5;
+    font-size: 14px;
+    font-weight: 400;
+    position: fixed;
+    border-radius: 12px;
+    top: 0;
+    left: 0;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    visibility: visible;
+    opacity: 1;
+    display: none;
+    z-index: 2147483647;
+    max-width: 440px;
+    overflow: hidden;
+}
+
+#eButtonTransSelText {
+    all: initial;
+    z-index: 2147483647;
+    position: fixed;
+    background-size: cover;
+    background-image: url("/icons/icon-32.png");
+    width: 22px;
+    height: 22px;
+    top: 0;
+    left: 0;
+    cursor: pointer;
+    visibility: visible;
+    opacity: 1;
+    display: none;
+}
+
+#dragBar {
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--primary-hover));
+    cursor: move;
+}
+
+#transTextContainer {
+    position: relative;
+}
+
+#eSelTextTrans {
+    overflow: auto;
+    padding: 12px;
+    padding-right: 48px;
+    font-size: 14px;
+    max-height: 250px;
+    white-space: pre-wrap;
+    min-height: 25px;
+    user-select: text;
+    line-height: 1.5;
+}
+
+.action-buttons {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.action-buttons div {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--action-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.action-buttons div:hover {
+    transform: scale(1.1);
+    background: var(--action-bg-hover);
+}
+
+.action-buttons div svg {
+    fill: currentColor;
+    width: 14px;
+    height: 14px;
+}
+
+.action-buttons .selected {
+    background: var(--primary);
+}
+
+#toggleOriginal {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    border: none;
+    background: none;
+    color: var(--text-muted);
+    font-size: 12px;
+    font-family: system-ui, -apple-system, sans-serif;
+    cursor: pointer;
+    text-align: left;
+    transition: color 0.15s;
+    border-top: 1px solid var(--border);
+}
+
+#toggleOriginal:hover {
+    color: var(--primary);
+}
+
+#origTextContainer {
+    position: relative;
+    border-top: 1px dashed var(--border);
+}
+
+.orig-action-buttons {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.orig-action-buttons div {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--action-bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease;
+    border: none;
+    padding: 0;
+    margin: 0;
+}
+
+.orig-action-buttons div:hover {
+    transform: scale(1.1);
+    background: var(--action-bg-hover);
+}
+
+.orig-action-buttons div svg {
+    fill: currentColor;
+    width: 14px;
+    height: 14px;
+}
+
+.orig-action-buttons .selected {
+    background: var(--primary);
+}
+
+#eOrigText {
+    overflow: auto;
+    padding: 12px;
+    padding-right: 48px;
+    font-size: 14px;
+    max-height: 250px;
+    white-space: pre-wrap;
+    min-height: 25px;
+    user-select: text;
+    line-height: 1.5;
+    font-style: italic;
+    color: var(--text-secondary);
+    outline: none;
+}
+
+#drag {
+    display: flex;
+    padding: 6px 10px;
+    border-top: 1px solid var(--border);
+    cursor: move;
+}
+
+.drag-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 100%;
+}
+
+.drag-spacer {
+    flex: 1;
+}
+
+#setTargetLanguage {
+    display: flex;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    user-select: none;
+    overflow: hidden;
+}
+
+#setTargetLanguage li {
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    float: none;
+    margin: 0;
+    text-align: center;
+    box-shadow: none;
+}
+
+#setTargetLanguage li:hover {
+    border-color: var(--primary);
+    transform: none;
+}
+
+#setTargetLanguage li.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+#moreOrLess {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 6px;
+    border-radius: 9999px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.15s;
+    max-height: none;
+    margin: 0;
+    box-shadow: none;
+}
+
+#moreOrLess:hover {
+    border-color: var(--primary);
+    transform: none;
+}
+
+.arrow {
+    border: solid var(--text-muted);
+    border-width: 0 1.5px 1.5px 0;
+    display: inline-block;
+    padding: 2px;
+}
+
+.up {
+    transform: rotate(-135deg);
+}
+
+.down {
+    transform: rotate(45deg);
+}
+
+#less {
+    display: none;
+}
+
+.services-list {
+    display: flex;
+    gap: 4px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    user-select: none;
+    overflow: hidden;
+}
+
+.services-list li {
+    padding: 3px 8px;
+    border-radius: 9999px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.15s;
+    float: none;
+    margin: 0;
+    text-align: center;
+    box-shadow: none;
+}
+
+.services-list li:hover {
+    border-color: var(--primary);
+    transform: none;
+}
+
+.services-list li.selected {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
