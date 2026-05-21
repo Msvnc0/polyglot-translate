@@ -1,11 +1,10 @@
 # <img src="https://github.com/Msvnc0/polyglot-translate/blob/main/src/icons/icon-128.png" height="50"> Polyglot Translate
 
-Translate web pages in real-time using Google, Bing, Yandex, or DeepL.
-
-Fork of [TWP - Translate Web Pages](https://github.com/FilipePS/Traduzir-paginas-web) by FilipePS.
+Translate web pages in real-time using Google, Bing, Yandex, or DeepL with a modernized UI.
 
 ## Features
 
+- **Modern UI** — Redesigned popup, options page, and text selection popup with dark mode support
 - **Real-time page translation** — Translate entire pages without opening new tabs
 - **Multiple translation engines** — Google, Bing, Yandex, DeepL
 - **Text selection translation** — Select text and get instant translation in a popup
