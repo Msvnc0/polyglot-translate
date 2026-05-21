@@ -35,10 +35,6 @@ See [build-instructions.md](build-instructions.md) for detailed build steps.
 
 See [CHANGELOG.md](CHANGELOG.md) for version history.
 
-## Roadmap
-
-See [ROADMAP.md](ROADMAP.md) for planned features.
-
 ## Contribute
 
 - Report issues at [GitHub Issues](https://github.com/Msvnc0/polyglot-translate/issues)
