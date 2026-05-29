@@ -498,8 +498,9 @@ if (typeof chrome.contextMenus !== "undefined") {
   });
 
   chrome.tabs.query({}, (tabs) =>
-    tabs.forEach((tab) =>
-      chrome.tabs.sendMessage(
+    tabs.forEach((tab) => {
+      try {
+    chrome.tabs.sendMessage(
         tab.id,
         {
           action: "contentScriptIsInjected",
@@ -513,8 +514,9 @@ if (typeof chrome.contextMenus !== "undefined") {
             tabHasContentScript[tab.id] = true;
           }
         }
-      )
-    )
+      );
+      } catch(e) {}
+    })
   );
 }
 
@@ -572,7 +574,7 @@ twpConfig.onReady(() => {
               active: true,
             },
             (tabs) => {
-              resetPageAction(tabs[0].id);
+              if (tabs[0]) resetPageAction(tabs[0].id);
             }
           );
           break;
@@ -804,8 +806,9 @@ twpConfig.onReady(() => {
       }
 
       function updateIcon(tabId) {
-        chrome.tabs.get(tabId, (tabInfo) => {
-          const incognito = tabInfo ? tabInfo.incognito : false;
+          chrome.tabs.get(tabId, (tabInfo) => {
+            if (chrome.runtime.lastError || !tabInfo) return;
+            const incognito = tabInfo ? tabInfo.incognito : false;
 
           if (chrome.pageAction && chrome.pageAction.setPopup) {
             resetPageAction(tabId);
@@ -846,14 +849,14 @@ twpConfig.onReady(() => {
 
       function updateIconInAllTabs() {
         chrome.tabs.query({}, (tabs) =>
-          tabs.forEach((tab) => updateIcon(tab.id))
+          tabs.forEach((tab) => { try { updateIcon(tab.id); } catch(e) {} })
         );
       }
 
       chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         if (changeInfo.status == "loading") {
           pageLanguageState = "original";
-          updateIcon(tabId);
+          try { updateIcon(tabId); } catch(e) {}
         } else if (changeInfo.status == "complete") {
           chrome.tabs.sendMessage(
             tabId,
@@ -867,7 +870,7 @@ twpConfig.onReady(() => {
               checkedLastError();
               if (_pageLanguageState) {
                 pageLanguageState = _pageLanguageState;
-                updateIcon(tabId);
+                try { updateIcon(tabId); } catch(e) {}
               }
             }
           );
@@ -876,7 +879,7 @@ twpConfig.onReady(() => {
 
       chrome.tabs.onActivated.addListener((activeInfo) => {
         pageLanguageState = "original";
-        updateIcon(activeInfo.tabId);
+        try { updateIcon(activeInfo.tabId); } catch(e) {}
         chrome.tabs.sendMessage(
           activeInfo.tabId,
           {
@@ -889,7 +892,7 @@ twpConfig.onReady(() => {
             checkedLastError();
             if (_pageLanguageState) {
               pageLanguageState = _pageLanguageState;
-              updateIcon(activeInfo.tabId);
+              try { updateIcon(activeInfo.tabId); } catch(e) {}
             }
           }
         );
@@ -929,7 +932,7 @@ if (typeof chrome.commands !== "undefined") {
           currentWindow: true,
           active: true,
         },
-        (tabs) => sendToggleTranslationMessage(tabs[0].id)
+        (tabs) => { if (tabs[0]) sendToggleTranslationMessage(tabs[0].id); }
       );
     } else if (command === "hotkey-translate-selected-text") {
       chrome.tabs.query(
@@ -937,14 +940,14 @@ if (typeof chrome.commands !== "undefined") {
           currentWindow: true,
           active: true,
         },
-        (tabs) =>
+        (tabs) => { if (!tabs[0]) return;
           chrome.tabs.sendMessage(
             tabs[0].id,
             {
               action: "TranslateSelectedText",
             },
             checkedLastError
-          )
+          ); }
       );
     } else if (command === "hotkey-swap-page-translation-service") {
       chrome.tabs.query(
@@ -952,7 +955,7 @@ if (typeof chrome.commands !== "undefined") {
           active: true,
           currentWindow: true,
         },
-        (tabs) =>
+        (tabs) => { if (!tabs[0]) return;
           chrome.tabs.sendMessage(
             tabs[0].id,
             {
@@ -960,7 +963,7 @@ if (typeof chrome.commands !== "undefined") {
               newServiceName: twpConfig.swapPageTranslationService(),
             },
             checkedLastError
-          )
+          ); }
       );
     } else if (command === "hotkey-show-original") {
       chrome.tabs.query(
@@ -968,7 +971,7 @@ if (typeof chrome.commands !== "undefined") {
           active: true,
           currentWindow: true,
         },
-        (tabs) =>
+        (tabs) => { if (!tabs[0]) return;
           chrome.tabs.sendMessage(
             tabs[0].id,
             {
@@ -976,7 +979,7 @@ if (typeof chrome.commands !== "undefined") {
               targetLanguage: "original",
             },
             checkedLastError
-          )
+          ); }
       );
     } else if (command === "hotkey-translate-page-1") {
       chrome.tabs.query(
@@ -984,7 +987,7 @@ if (typeof chrome.commands !== "undefined") {
           active: true,
           currentWindow: true,
         },
-        (tabs) => {
+        (tabs) => { if (!tabs[0]) return;
           twpConfig.setTargetLanguage(twpConfig.get("targetLanguages")[0]);
           sendTranslatePageMessage(
             tabs[0].id,
@@ -998,7 +1001,7 @@ if (typeof chrome.commands !== "undefined") {
           active: true,
           currentWindow: true,
         },
-        (tabs) => {
+        (tabs) => { if (!tabs[0]) return;
           twpConfig.setTargetLanguage(twpConfig.get("targetLanguages")[1]);
           sendTranslatePageMessage(
             tabs[0].id,
@@ -1012,7 +1015,7 @@ if (typeof chrome.commands !== "undefined") {
           active: true,
           currentWindow: true,
         },
-        (tabs) => {
+        (tabs) => { if (!tabs[0]) return;
           twpConfig.setTargetLanguage(twpConfig.get("targetLanguages")[2]);
           sendTranslatePageMessage(
             tabs[0].id,
@@ -1026,7 +1029,7 @@ if (typeof chrome.commands !== "undefined") {
           active: true,
           currentWindow: true,
         },
-        (tabs) => {
+        (tabs) => { if (!tabs[0]) return;
           chrome.tabs.sendMessage(
             tabs[0].id,
             {
@@ -1239,8 +1242,12 @@ chrome.runtime.onUpdateAvailable.addListener((details) => {
     tabs.forEach((tab) => {
       cleanUpsPromises.push(
         new Promise((resolve) => {
-          chrome.tabs.sendMessage(tab.id, { action: "cleanUp" }, resolve);
-        })
+          try {
+            chrome.tabs.sendMessage(tab.id, { action: "cleanUp" }, resolve);
+          } catch (e) {
+            resolve();
+          }
+        }).catch(() => {})
       );
     });
     Promise.all(cleanUpsPromises).finally(() => {

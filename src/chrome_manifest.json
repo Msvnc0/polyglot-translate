@@ -50,9 +50,7 @@
     "storage",
     "activeTab",
     "contextMenus",
-    "webRequest",
-    "alarms",
-    "offscreen"
+    "webRequest"
   ],
   "host_permissions": [
     "<all_urls>"

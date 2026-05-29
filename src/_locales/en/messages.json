@@ -1,6 +1,6 @@
 {
   "extensionDescription": {
-    "message": "Translate web pages in real-time using Google, Bing, Yandex, DeepL or LLM. Powered by Polyglot Translate."
+    "message": "Translate web pages in real-time using Google, Bing, Yandex, or DeepL. Powered by Polyglot Translate."
   },
   "pageActionTitle": {
     "message": "Polyglot Translate"
@@ -596,88 +596,5 @@
   },
   "btnChangePosition": {
     "message": "Change position"
-  },
-  "lblLLMSettings": {
-    "message": "LLM Translation Settings"
-  },
-  "lblLLMProvider": {
-    "message": "LLM Provider"
-  },
-  "lblLLMApiKey": {
-    "message": "API Key"
-  },
-  "lblLLMApiUrl": {
-    "message": "API URL (OpenAI Compatible)"
-  },
-  "lblLLMModel": {
-    "message": "Model"
-  },
-  "lblLLMTemperature": {
-    "message": "Temperature"
-  },
-  "lblLLMMaxTokens": {
-    "message": "Max Tokens"
-  },
-  "lblLLMPromptTemplate": {
-    "message": "Custom Prompt Template"
-  },
-  "lblLLMCacheSettings": {
-    "message": "Cache Settings"
-  },
-  "lblLLMCacheTTL": {
-    "message": "Cache Duration"
-  },
-  "lblLLMCacheMaxSize": {
-    "message": "Max Cache Size"
-  },
-  "lblLLMCacheCurrentSize": {
-    "message": "Current Cache Size"
-  },
-  "lblLLMCacheHitRate": {
-    "message": "Cache Hit Rate"
-  },
-  "lblLLMEnableCache": {
-    "message": "Enable Translation Cache"
-  },
-  "btnClearLLMCache": {
-    "message": "Clear LLM Cache"
-  },
-  "btnTestLLMConnection": {
-    "message": "Test Connection"
-  },
-  "msgLLMTestSuccess": {
-    "message": "Connection successful!"
-  },
-  "msgLLMTestFailed": {
-    "message": "Connection failed: $ERROR$",
-    "placeholders": {
-      "error": {
-        "content": "$1"
-      }
-    }
-  },
-  "msgLLMNotConfigured": {
-    "message": "LLM is not configured. Please enter your API key."
-  },
-  "lblLLMCache1day": {
-    "message": "1 day"
-  },
-  "lblLLMCache7days": {
-    "message": "7 days"
-  },
-  "lblLLMCache30days": {
-    "message": "30 days"
-  },
-  "lblLLMCache90days": {
-    "message": "90 days"
-  },
-  "lblLLMCacheNever": {
-    "message": "Never expire"
-  },
-  "swapLLMTranslationService": {
-    "message": "Switch to LLM translation"
-  },
-  "llmServiceName": {
-    "message": "LLM"
   }
 }
