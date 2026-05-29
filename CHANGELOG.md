@@ -7,8 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- 
+## [0.2.1] - 2026-05-29
+
+### Removed
+- Remove unused `offscreen` and `alarms` permissions from Chrome MV3 manifest
+- Remove dead LLM i18n keys from English locale (feature removed in v0.2.0)
+- Remove unused donation icons (patreon, coinpayments, btn_donate)
+
+### Fixed
+- Fix "No tab with id" uncaught promise error during extension update (`onUpdateAvailable`)
+- Add null guards for all `tabs[0]` access in hotkey command handlers
+- Add `chrome.runtime.lastError` check in `updateIcon` to prevent crashes on closed tabs
+- Add try-catch around tab API calls in `updateIconInAllTabs`, `onUpdated`, `onActivated`
+- Fix extension description referencing removed LLM feature
 
 ## [0.2.0] - 2026-05-22
 
