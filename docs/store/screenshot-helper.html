@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polyglot Translate - Screenshot Helper</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background: #e8eaed;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        .frame {
+            background: #fff;
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .frame-label {
+            font-size: 13px;
+            color: #5f6368;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        .popup { width: 320px; padding: 16px; }
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .popup-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #202124;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .popup-gear { background: none; border: none; cursor: pointer; font-size: 18px; }
+        .lang-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 12px; }
+        .lang-card {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #202124;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .lang-card.active { background: #1a73e8; color: #fff; font-weight: 600; }
+        .action-btns { display: flex; gap: 8px; margin-top: 10px; }
+        .btn {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary { background: #1a73e8; color: #fff; }
+        .btn-secondary { background: #f1f3f4; color: #5f6368; }
+        .quick-pills { display: flex; flex-wrap: wrap; gap: 4px; margin: 10px 0; }
+        .pill { padding: 4px 10px; background: #f1f3f4; border-radius: 16px; font-size: 11px; color: #5f6368; cursor: pointer; }
+        .more-row {
+            display: flex;
+            align-items: center; justify-content: space-between;
+            padding: 6px 0;
+            font-size: 12px; color: #5f6368;
+            border-top: 1px solid #eee;
+            margin-top: 8px;
+        }
+        .service-row { display: flex; gap: 6px; padding: 4px 0 0; }
+        .service-badge {
+            font-size: 11px; color: #5f6368;
+            background: #f1f3f4;
+            padding: 2px 8px; border-radius: 4px;
+        }
+        .options { width: 880px; display: flex; height: 520px; }
+        .sidebar { width: 220px; background: #f8f9fa; border-right: 1px solid #eee; padding: 20px 0; }
+        .sidebar-item { padding: 10px 20px; font-size: 14px; color: #5f6368; cursor: pointer; }
+        .sidebar-item.active { color: #1a73e8; background: rgba(26,115,232,0.08); border-right: 2px solid #1a73e8; }
+        .main { flex: 1; padding: 24px; overflow-y: auto; }
+        .card { background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 20px; margin-bottom: 16px; }
+        .card-title { font-size: 15px; font-weight: 700; margin-bottom: 12px; color: #202124; }
+        .card-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 13px; color: #5f6368; }
+        .toggle { width: 36px; height: 20px; background: #1a73e8; border-radius: 10px; position: relative; }
+        .toggle::after { content: ''; position: absolute; width: 16px; height: 16px; background: #fff; border-radius: 50%; top: 2px; right: 2px; }
+        .toggle-off { background: #dadce0; }
+        .toggle-off::after { left: 2px; }
+        .select-box { padding: 6px 12px; border: 1px solid #dadce0; border-radius: 8px; font-size: 13px; color: #202124; min-width: 160px; }
+
+        /* Dark theme */
+        .dark .popup-title { color: #f8f9fa; }
+        .dark .lang-card { background: #2c3035; color: #f8f9fa; }
+        .dark .btn-secondary { background: #2c3035; color: #adb5bd; }
+        .dark .more-row, .dark .pill { color: #adb5bd; background: #2c3035; }
+        .dark .options { background: #1a1d21; }
+        .dark .sidebar { background: #202327; border-color: #2c3035; }
+        .dark .sidebar-item { color: #adb5bd; }
+        .dark .main { background: #1a1d21; }
+        .dark .card { background: #1a1d21; border-color: #2c3035; }
+        .dark .card-title { color: #f8f9fa; }
+        .dark .card-row { color: #adb5bd; }
+        .dark .select-box { background: #2c3035; border-color: #2c3035; color: #f8f9fa; }
+        .dark .service-badge, .dark .lang-card { background: #2c3035; }
+
+        .banner {
+            width: 1280px; height: 800px;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            background: linear-gradient(135deg, #1a73e8 0%, #00a67e 100%);
+            color: #fff; text-align: center;
+        }
+        .banner h1 { font-size: 72px; font-weight: 800; margin-bottom: 16px; letter-spacing: -2px; }
+        .banner p { font-size: 28px; opacity: 0.9; max-width: 700px; }
+    </style>
+</head>
+<body>
+    <div class="frame-label">Screenshot 1 — Popup Light Mode (640x400)</div>
+    <div class="frame popup">
+        <div class="popup-header">
+            <div class="popup-title">Polyglot Translate</div>
+            <div class="popup-gear">&#9881;</div>
+        </div>
+        <div class="lang-grid">
+            <div class="lang-card active">English</div>
+            <div class="lang-card">Spanish</div>
+            <div class="lang-card">French</div>
+            <div class="lang-card">German</div>
+            <div class="lang-card">Japanese</div>
+            <div class="lang-card">Chinese</div>
+        </div>
+        <div class="quick-pills">
+            <span class="pill">Turkish</span>
+            <span class="pill">Korean</span>
+            <span class="pill">Portuguese</span>
+        </div>
+        <div class="action-btns">
+            <button class="btn btn-primary">Translate</button>
+            <button class="btn btn-secondary">Restore</button>
+        </div>
+        <div class="more-row"><span>More languages</span><span>&#9662;</span></div>
+        <div class="service-row">
+            <span class="service-badge">Google Translate</span>
+            <span class="service-badge">Swap</span>
+        </div>
+    </div>
+
+    <div class="frame-label">Screenshot 2 — Popup Dark Mode</div>
+    <div class="frame popup dark">
+        <div class="popup-header">
+            <div class="popup-title">Polyglot Translate</div>
+            <div class="popup-gear">&#9881;</div>
+        </div>
+        <div class="lang-grid">
+            <div class="lang-card active">English</div>
+            <div class="lang-card">Spanish</div>
+            <div class="lang-card">French</div>
+            <div class="lang-card">German</div>
+            <div class="lang-card">Japanese</div>
+            <div class="lang-card">Chinese</div>
+        </div>
+        <div class="quick-pills">
+            <span class="pill">Turkish</span>
+            <span class="pill">Korean</span>
+            <span class="pill">Portuguese</span>
+        </div>
+        <div class="action-btns">
+            <button class="btn btn-primary">Translate</button>
+            <button class="btn btn-secondary">Restore</button>
+        </div>
+        <div class="more-row"><span>More languages</span><span>&#9662;</span></div>
+        <div class="service-row">
+            <span class="service-badge">Google Translate</span>
+            <span class="service-badge">Swap</span>
+        </div>
+    </div>
+
+    <div class="frame-label">Screenshot 3 — Options Light Mode (1280x800)</div>
+    <div class="frame options">
+        <div class="sidebar">
+            <div class="sidebar-item">Translation</div>
+            <div class="sidebar-item active">Settings</div>
+            <div class="sidebar-item">Appearance</div>
+            <div class="sidebar-item">Hotkeys</div>
+            <div class="sidebar-item">Sites</div>
+            <div class="sidebar-item">Advanced</div>
+        </div>
+        <div class="main">
+            <div class="card">
+                <div class="card-title">Target Language</div>
+                <div class="card-row">
+                    <span>Default target language for page translation</span>
+                    <select class="select-box"><option>English</option></select>
+                </div>
+                <div class="card-row">
+                    <span>Default target language for text translation</span>
+                    <select class="select-box"><option>English</option></select>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Translation Services</div>
+                <div class="card-row">
+                    <span>Page Translation Service</span>
+                    <select class="select-box"><option>Google Translate</option></select>
+                </div>
+                <div class="card-row">
+                    <span>Text Translation Service</span>
+                    <select class="select-box"><option>Google Translate</option></select>
+                </div>
+                <div class="card-row">
+                    <span>Enable DeepL API</span>
+                    <div class="toggle"></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Site Rules</div>
+                <div class="card-row">
+                    <span>Never translate these sites</span>
+                    <div class="toggle toggle-off"></div>
+                </div>
+                <div class="card-row">
+                    <span>Always translate these sites</span>
+                    <div class="toggle toggle-off"></div>
+                </div>
+                <div class="card-row">
+                    <span>Show button in address bar</span>
+                    <div class="toggle"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="frame-label">Screenshot 4 — Promotional Banner (1280x800)</div>
+    <div class="frame banner">
+        <h1>Polyglot Translate</h1>
+        <p>Translate any web page in one click. 100+ languages, zero compromises.</p>
+    </div>
+</body>
+</html>

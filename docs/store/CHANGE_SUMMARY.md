@@ -1,0 +1,6 @@
+- Removed unused `offscreen` and `alarms` permissions
+- Fixed "No tab with id" error that occurred during extension updates
+- Added null guards for all tab API calls in background script
+- Improved error handling around tab closure events
+- Removed references to discontinued LLM translation feature
+- Cleaned up unused icons
