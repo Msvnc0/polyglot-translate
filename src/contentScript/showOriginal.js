@@ -159,6 +159,7 @@ twpConfig.onReady(function () {
     shadowRoot = divElement.attachShadow({
       mode: "closed",
     });
+    // innerHTML is safe here: content is a static extension-owned template with no user input
     shadowRoot.innerHTML = `
             <link rel="stylesheet" href="${chrome.runtime.getURL(
               "/contentScript/css/showOriginal.css"

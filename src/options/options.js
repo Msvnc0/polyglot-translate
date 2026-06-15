@@ -204,7 +204,7 @@ twpConfig
       }
 
       function populateAddSelect() {
-        addSelect.innerHTML = "";
+        addSelect.replaceChildren();
         var langs = twpLang.getLanguageList();
         var entries = [];
         for (var code in langs) {
@@ -227,7 +227,7 @@ twpConfig
       }
 
       function renderPills() {
-        container.innerHTML = "";
+        container.replaceChildren();
         var currentLangs = twpConfig.get("targetLanguages") || [];
         var activeLang = twpConfig.get("targetLanguage");
 
@@ -432,7 +432,7 @@ twpConfig
 
       const close = document.createElement("span");
       close.setAttribute("class", "list-close");
-      close.innerHTML = "&times;";
+      close.textContent = "\u00d7";
 
       close.onclick = (e) => {
         e.preventDefault();
@@ -471,7 +471,7 @@ twpConfig
 
       const close = document.createElement("span");
       close.setAttribute("class", "list-close");
-      close.innerHTML = "&times;";
+      close.textContent = "\u00d7";
 
       close.onclick = (e) => {
         e.preventDefault();
@@ -510,7 +510,7 @@ twpConfig
 
       const close = document.createElement("span");
       close.setAttribute("class", "list-close");
-      close.innerHTML = "&times;";
+      close.textContent = "\u00d7";
 
       close.onclick = (e) => {
         e.preventDefault();
@@ -557,7 +557,7 @@ twpConfig
 
       const close = document.createElement("span");
       close.setAttribute("class", "list-close");
-      close.innerHTML = "&times;";
+      close.textContent = "\u00d7";
 
       close.onclick = (e) => {
         e.preventDefault();
@@ -596,7 +596,7 @@ twpConfig
 
       const close = document.createElement("span");
       close.setAttribute("class", "list-close");
-      close.innerHTML = "&times;";
+      close.textContent = "\u00d7";
 
       close.onclick = (e) => {
         e.preventDefault();
@@ -636,7 +636,7 @@ twpConfig
       }
       const close = document.createElement("span");
       close.setAttribute("class", "list-close");
-      close.innerHTML = "&times;";
+      close.textContent = "\u00d7";
 
       close.onclick = (e) => {
         e.preventDefault();
@@ -683,7 +683,7 @@ twpConfig
 
       const close = document.createElement("span");
       close.setAttribute("class", "list-close");
-      close.innerHTML = "&times;";
+      close.textContent = "\u00d7";
 
       close.onclick = (e) => {
         e.preventDefault();
@@ -950,12 +950,36 @@ twpConfig
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
     }
-    $('[data-i18n="lblTranslateSelectedWhenPressTwice"]').innerHTML = $(
-      '[data-i18n="lblTranslateSelectedWhenPressTwice"]'
-    ).innerHTML.replace("[Ctrl]", "<kbd>Ctrl</kbd>");
-    $('[data-i18n="lblTranslateTextOverMouseWhenPressTwice"]').innerHTML = $(
-      '[data-i18n="lblTranslateTextOverMouseWhenPressTwice"]'
-    ).innerHTML.replace("[Ctrl]", "<kbd>Ctrl</kbd>");
+    (function wrapKbdCtrl(sel) {
+      const el = document.querySelector(sel);
+      if (!el) return;
+      const text = el.textContent;
+      const idx = text.indexOf("[Ctrl]");
+      if (idx === -1) return;
+      const before = text.substring(0, idx);
+      const after = text.substring(idx + 6);
+      el.replaceChildren();
+      el.append(before);
+      const kbd = document.createElement("kbd");
+      kbd.textContent = "Ctrl";
+      el.appendChild(kbd);
+      el.append(after);
+    })('[data-i18n="lblTranslateSelectedWhenPressTwice"]');
+    (function wrapKbdCtrl(sel) {
+      const el = document.querySelector(sel);
+      if (!el) return;
+      const text = el.textContent;
+      const idx = text.indexOf("[Ctrl]");
+      if (idx === -1) return;
+      const before = text.substring(0, idx);
+      const after = text.substring(idx + 6);
+      el.replaceChildren();
+      el.append(before);
+      const kbd = document.createElement("kbd");
+      kbd.textContent = "Ctrl";
+      el.appendChild(kbd);
+      el.append(after);
+    })('[data-i18n="lblTranslateTextOverMouseWhenPressTwice"]');
 
     $("#openNativeShortcutManager").onclick = (e) => {
       tabsCreate("chrome://extensions/shortcuts");
@@ -1058,23 +1082,53 @@ twpConfig
       const li = document.createElement("li");
       li.classList.add("shortcut-row");
       li.setAttribute("id", hotkeyname);
-      li.innerHTML = `
-        <div>${description}</div>
-        <div class="shortcut-input-options">
-            <div style="position: relative;">
-                <input name="input" class="shortcut-input" type="text" readonly placeholder="${enterShortcut}" data-i18n-placeholder="enterShortcut">
-                <p name="error" class="shortcut-error" style="position: absolute;"></p>
-            </div>
-            <div class="shortcut-button" name="removeKey"><i class="gg-trash"></i></div>
-            <div class="shortcut-button" name="resetKey"><i class="gg-sync"></i></div>
-        </div>  
-        `;
+
+      const descDiv = document.createElement("div");
+      descDiv.textContent = description;
+
+      const optionsDiv = document.createElement("div");
+      optionsDiv.className = "shortcut-input-options";
+
+      const posDiv = document.createElement("div");
+      posDiv.style.position = "relative";
+
+      const input = document.createElement("input");
+      input.name = "input";
+      input.className = "shortcut-input";
+      input.type = "text";
+      input.readOnly = true;
+      input.placeholder = enterShortcut;
+      input.setAttribute("data-i18n-placeholder", "enterShortcut");
+
+      const errorP = document.createElement("p");
+      errorP.name = "error";
+      errorP.className = "shortcut-error";
+      errorP.style.position = "absolute";
+
+      posDiv.appendChild(input);
+      posDiv.appendChild(errorP);
+
+      const removeBtn = document.createElement("div");
+      removeBtn.className = "shortcut-button";
+      removeBtn.name = "removeKey";
+      removeBtn.innerHTML = '<i class="gg-trash"></i>'; // css.gg icon: empty <i> styled by class, no user content
+
+      const resetBtn = document.createElement("div");
+      resetBtn.className = "shortcut-button";
+      resetBtn.name = "resetKey";
+      resetBtn.innerHTML = '<i class="gg-sync"></i>'; // css.gg icon: empty <i> styled by class, no user content
+
+      optionsDiv.appendChild(posDiv);
+      optionsDiv.appendChild(removeBtn);
+      optionsDiv.appendChild(resetBtn);
+
+      li.appendChild(descDiv);
+      li.appendChild(optionsDiv);
       $("#KeyboardShortcuts").appendChild(li);
 
-      const input = li.querySelector(`[name="input"]`);
-      const error = li.querySelector(`[name="error"]`);
-      const removeKey = li.querySelector(`[name="removeKey"]`);
-      const resetKey = li.querySelector(`[name="resetKey"]`);
+      const error = errorP;
+      const removeKey = removeBtn;
+      const resetKey = resetBtn;
 
       input.value = twpConfig.get("hotkeys")[hotkeyname];
       if (input.value) {
@@ -1695,7 +1749,7 @@ twpConfig
 
       function renderAlwaysSites() {
         if (!alwaysUlEl) return;
-        alwaysUlEl.innerHTML = "";
+        alwaysUlEl.replaceChildren();
         const sites = twpConfig.get("alwaysTranslateSites") || [];
         sites.sort((a, b) => a.localeCompare(b));
         sites.forEach((hostname, i) => {
@@ -1704,7 +1758,7 @@ twpConfig
           li.textContent = hostname;
           const close = document.createElement("span");
           close.className = "list-close";
-          close.innerHTML = "&times;";
+          close.textContent = "\u00d7";
           close.onclick = () => {
             twpConfig.removeSiteFromAlwaysTranslate(hostname);
             renderAlwaysSites();
@@ -1752,7 +1806,7 @@ twpConfig
 
       function renderNeverSites() {
         if (!neverUlEl) return;
-        neverUlEl.innerHTML = "";
+        neverUlEl.replaceChildren();
         const sites = twpConfig.get("neverTranslateSites") || [];
         sites.sort((a, b) => a.localeCompare(b));
         sites.forEach((hostname, i) => {
@@ -1761,7 +1815,7 @@ twpConfig
           li.textContent = hostname;
           const close = document.createElement("span");
           close.className = "list-close";
-          close.innerHTML = "&times;";
+          close.textContent = "\u00d7";
           close.onclick = () => {
             twpConfig.removeSiteFromNeverTranslate(hostname);
             renderNeverSites();
@@ -1812,7 +1866,11 @@ twpConfig
         function populateLangSelects() {
           [alwaysLangSelect, neverLangSelect].forEach((sel) => {
             if (!sel) return;
-            sel.innerHTML = '<option value="">+ Add language</option>';
+            sel.replaceChildren();
+            const defaultOpt = document.createElement("option");
+            defaultOpt.value = "";
+            defaultOpt.textContent = "+ Add language";
+            sel.appendChild(defaultOpt);
             const langs = twpLang.getLanguageList();
             const entries = [];
             for (const code in langs) {
@@ -1831,7 +1889,7 @@ twpConfig
 
         function renderAlwaysLangs() {
           if (!alwaysLangUl) return;
-          alwaysLangUl.innerHTML = "";
+          alwaysLangUl.replaceChildren();
           const langs = twpConfig.get("alwaysTranslateLangs") || [];
           const countEl = alwaysLangUl.parentElement.querySelector(".site-list-count");
           if (countEl) countEl.textContent = langs.length;
@@ -1849,7 +1907,7 @@ twpConfig
             li.textContent = twpLang.codeToLanguage(code) + " (" + code + ")";
             const close = document.createElement("span");
             close.className = "list-close";
-            close.innerHTML = "&times;";
+            close.textContent = "\u00d7";
             close.onclick = () => {
               twpConfig.removeLangFromAlwaysTranslate(code);
               renderAlwaysLangs();
@@ -1871,7 +1929,7 @@ twpConfig
 
         function renderNeverLangs() {
           if (!neverLangUl) return;
-          neverLangUl.innerHTML = "";
+          neverLangUl.replaceChildren();
           const langs = twpConfig.get("neverTranslateLangs") || [];
           const countEl = neverLangUl.parentElement.querySelector(".site-list-count");
           if (countEl) countEl.textContent = langs.length;
@@ -1889,7 +1947,7 @@ twpConfig
             li.textContent = twpLang.codeToLanguage(code) + " (" + code + ")";
             const close = document.createElement("span");
             close.className = "list-close";
-            close.innerHTML = "&times;";
+            close.textContent = "\u00d7";
             close.onclick = () => {
               twpConfig.removeLangFromNeverTranslate(code);
               renderNeverLangs();

@@ -1,7 +1,5 @@
-require("core-js/modules/es.promise.js");
 require("core-js/modules/es.regexp.exec.js");
 require("core-js/modules/es.string.replace.js");
-require("core-js/modules/es.promise.finally.js");
 require("core-js/modules/es.array.reduce.js");
 require("core-js/modules/es.typed-array.set.js");
 require("core-js/modules/es.typed-array.sort.js");

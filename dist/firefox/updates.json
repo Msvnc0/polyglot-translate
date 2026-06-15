@@ -1,6 +1,6 @@
 {
   "addons": {
-    "{a1b2c3d4-e5f6-7890-abcd-ef1234567890}": {
+    "{d02f61be-f70f-4f19-8c13-708e7d445282}": {
       "updates": [
         {
           "version": "0.1.0",
@@ -8,6 +8,13 @@
             "gecko": { "strict_min_version": "64.0" }
           },
           "update_link": "https://github.com/polyglot-translate/polyglot-translate/releases/download/v0.1.0/Polyglot_0.1.0_Firefox.xpi"
+        },
+        {
+          "version": "0.2.1",
+          "browser_specific_settings": {
+            "gecko": { "strict_min_version": "140.0" }
+          },
+          "update_link": "https://github.com/polyglot-translate/polyglot-translate/releases/download/v0.2.1/Polyglot_0.2.1_Firefox.xpi"
         }
       ]
     }

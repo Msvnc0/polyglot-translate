@@ -44,6 +44,7 @@ void (async function () {
   rootElement.classList.add("notranslate");
 
   const shadowRoot = rootElement.attachShadow({ mode: "closed" });
+  // innerHTML is safe here: content is fetched from extension package HTML, not user input
   shadowRoot.innerHTML = htmlText;
 
   // update css property --popup-height
@@ -594,7 +595,7 @@ void (async function () {
     const eRecentsLangs = menuSelectLanguage.querySelector('[name="targets"]');
 
     const buildRecentsLanguages = () => {
-      eRecentsLangs.innerHTML = "";
+      eRecentsLangs.replaceChildren();
       for (const value of twpConfig.get("targetLanguages")) {
         const option = document.createElement("option");
         option.value = value;

@@ -43,7 +43,9 @@
   },
   "icons": {
     "32": "/icons/icon-32.png",
+    "48": "/icons/icon-48.png",
     "64": "/icons/icon-64.png",
+    "96": "/icons/icon-96.png",
     "128": "/icons/icon-128.png"
   },
   "permissions": [
@@ -78,7 +80,12 @@
     "open_in_tab": true
   },
   "action": {
-    "default_icon": "/icons/icon-32.png",
+    "default_icon": {
+      "16": "/icons/icon-16.png",
+      "32": "/icons/icon-32.png",
+      "48": "/icons/icon-48.png",
+      "64": "/icons/icon-64.png"
+    },
     "default_title": "__MSG_pageActionTitle__",
     "default_popup": "/popup/popup.html"
   },

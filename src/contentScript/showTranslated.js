@@ -408,6 +408,7 @@ Promise.all([twpConfig.onReady(), getTabHostName()]).then(function (_) {
     shadowRoot = divElement.attachShadow({
       mode: "closed",
     });
+    // innerHTML is safe here: content is a static extension-owned template with no user input
     shadowRoot.innerHTML = `
         <link rel="stylesheet" href="${chrome.runtime.getURL(
           "/contentScript/css/showTranslated.css"

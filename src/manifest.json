@@ -7,8 +7,11 @@
   "homepage_url": "https://github.com/polyglot-translate/polyglot-translate",
   "browser_specific_settings": {
     "gecko": {
-      "id": "{a1b2c3d4-e5f6-7890-abcd-ef1234567890}",
-      "strict_min_version": "64.0"
+      "id": "{d02f61be-f70f-4f19-8c13-708e7d445282}",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
     }
   },
   "commands": {
@@ -63,7 +66,9 @@
   },
   "icons": {
     "32": "/icons/icon-32.png",
+    "48": "/icons/icon-48.png",
     "64": "/icons/icon-64.png",
+    "96": "/icons/icon-96.png",
     "128": "/icons/icon-128.png"
   },
   "permissions": [

@@ -187,6 +187,7 @@ Promise.all([twpConfig.onReady(), getTabHostName()]).then(function (_) {
       mode: "closed",
     });
 
+    // innerHTML is safe here: content is a static extension-owned template with no user input
     shadowRoot.innerHTML = `
         <div id="eButtonTransSelText" style="display: none"></div>
         <div id="eDivResult" style="display: none">

@@ -208,7 +208,7 @@ twpConfig
     }
 
     function renderGrid() {
-      langGrid.innerHTML = "";
+      langGrid.replaceChildren();
       const langs = twpConfig.get("targetLanguages") || [];
       langs.forEach((lang, idx) => {
         const btn = document.createElement("button");
@@ -314,7 +314,7 @@ twpConfig
     renderGrid();
 
     function populateGridSelect(sel) {
-      sel.innerHTML = "";
+      sel.replaceChildren();
       const opt = document.createElement("option");
       opt.value = "";
       opt.textContent = "Add language...";
@@ -369,7 +369,7 @@ twpConfig
     const recentLangsEl = $("#recentLangs");
     function renderRecentPills() {
       if (!recentLangsEl) return;
-      recentLangsEl.innerHTML = "";
+      recentLangsEl.replaceChildren();
       const recent = twpConfig.get("recentlyUsedLanguages") || [];
       const quickLangs = twpConfig.get("targetLanguages") || [];
       const recentSection = $("#recentSection");
